@@ -1,0 +1,74 @@
+<div>
+    <h2>
+        <span jhiTranslate="jhipsterApp.businessBasicIndex.home.title">Business Basic Indices</span>
+        <button class="btn btn-primary float-right jh-create-entity create-business-basic-index" [routerLink]="['/', { outlets: { popup: ['business-basic-index-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span  jhiTranslate="jhipsterApp.businessBasicIndex.home.createLabel">
+            Create new Business Basic Index
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="businessBasicIndices">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="jhipsterApp.businessBasicIndex.year">Year</span></th>
+            <th><span jhiTranslate="jhipsterApp.businessBasicIndex.month">Month</span></th>
+            <th><span jhiTranslate="jhipsterApp.businessBasicIndex.value">Value</span></th>
+            <th><span jhiTranslate="jhipsterApp.businessBasicIndex.business">Business</span></th>
+            <th><span jhiTranslate="jhipsterApp.businessBasicIndex.basicIndex">Basic Index</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let businessBasicIndex of businessBasicIndices ;trackBy: trackId">
+                <td><a [routerLink]="['../business-basic-index', businessBasicIndex.id ]">{{businessBasicIndex.id}}</a></td>
+                <td>{{businessBasicIndex.year}}</td>
+                <td>{{businessBasicIndex.month}}</td>
+                <td>{{businessBasicIndex.value}}</td>
+                <td>
+                    <div *ngIf="businessBasicIndex.businessId">
+                        <a [routerLink]="['../business', businessBasicIndex.businessId  ]" >{{businessBasicIndex.businessName}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="businessBasicIndex.basicIndexId">
+                        <a [routerLink]="['../basic-index', businessBasicIndex.basicIndexId  ]" >{{businessBasicIndex.basicIndexName}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../business-basic-index', businessBasicIndex.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'business-basic-index/'+ businessBasicIndex.id + '/edit'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'business-basic-index/'+ businessBasicIndex.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

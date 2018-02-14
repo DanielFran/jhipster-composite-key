@@ -1,0 +1,26 @@
+
+{
+    "jhipsterApp": {
+        "businessBasicIndex" : {
+            "home": {
+                "title": "Business Basic Indices",
+                "createLabel": "Create a new Business Basic Index",
+                "createOrEditLabel": "Create or edit a Business Basic Index"
+            },
+            "created": "A new Business Basic Index is created with identifier {{ param }}",
+            "updated": "A Business Basic Index is updated with identifier {{ param }}",
+            "deleted": "A Business Basic Index is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Business Basic Index {{ id }}?"
+            },
+            "detail": {
+                "title": "Business Basic Index"
+            },
+            "year": "Year",
+            "month": "Month",
+            "value": "Value",
+            "business": "Business",
+            "basicIndex": "Basic Index"
+        }
+    }
+}

@@ -1,0 +1,24 @@
+
+{
+    "jhipsterApp": {
+        "basicIndex" : {
+            "home": {
+                "title": "BasicIndices",
+                "createLabel": "Créer un nouveau Basic Index",
+                "createOrEditLabel": "Créer ou éditer un Basic Index"
+            },
+            "created": "Un nouveau Basic Index a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Basic Index avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Basic Index avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Basic Index {{ id }} ?"
+            },
+            "detail": {
+                "title": "Basic Index"
+            },
+            "name": "Name",
+            "nickname": "Nickname",
+            "description": "Description"
+        }
+    }
+}

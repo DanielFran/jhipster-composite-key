@@ -1,0 +1,32 @@
+
+{
+    "jhipsterApp": {
+        "business" : {
+            "home": {
+                "title": "Businesses",
+                "createLabel": "Créer un nouveau Business",
+                "createOrEditLabel": "Créer ou éditer un Business"
+            },
+            "created": "Un nouveau Business a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Business avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Business avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Business {{ id }} ?"
+            },
+            "detail": {
+                "title": "Business"
+            },
+            "name": "Name",
+            "phone": "Phone",
+            "email": "Email",
+            "fax": "Fax",
+            "country": "Country",
+            "city": "City",
+            "postalCode": "Postal Code",
+            "address1": "Address 1",
+            "address2": "Address 2",
+            "lat": "Lat",
+            "lng": "Lng"
+        }
+    }
+}

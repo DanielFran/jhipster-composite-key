@@ -1,0 +1,78 @@
+<div>
+    <h2>
+        <span jhiTranslate="jhipsterApp.business.home.title">Businesses</span>
+        <button class="btn btn-primary float-right jh-create-entity create-business" [routerLink]="['/', { outlets: { popup: ['business-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span  jhiTranslate="jhipsterApp.business.home.createLabel">
+            Create new Business
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="businesses">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="jhipsterApp.business.name">Name</span></th>
+            <th><span jhiTranslate="jhipsterApp.business.phone">Phone</span></th>
+            <th><span jhiTranslate="jhipsterApp.business.email">Email</span></th>
+            <th><span jhiTranslate="jhipsterApp.business.fax">Fax</span></th>
+            <th><span jhiTranslate="jhipsterApp.business.country">Country</span></th>
+            <th><span jhiTranslate="jhipsterApp.business.city">City</span></th>
+            <th><span jhiTranslate="jhipsterApp.business.postalCode">Postal Code</span></th>
+            <th><span jhiTranslate="jhipsterApp.business.address1">Address 1</span></th>
+            <th><span jhiTranslate="jhipsterApp.business.address2">Address 2</span></th>
+            <th><span jhiTranslate="jhipsterApp.business.lat">Lat</span></th>
+            <th><span jhiTranslate="jhipsterApp.business.lng">Lng</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let business of businesses ;trackBy: trackId">
+                <td><a [routerLink]="['../business', business.id ]">{{business.id}}</a></td>
+                <td>{{business.name}}</td>
+                <td>{{business.phone}}</td>
+                <td>{{business.email}}</td>
+                <td>{{business.fax}}</td>
+                <td>{{business.country}}</td>
+                <td>{{business.city}}</td>
+                <td>{{business.postalCode}}</td>
+                <td>{{business.address1}}</td>
+                <td>{{business.address2}}</td>
+                <td>{{business.lat}}</td>
+                <td>{{business.lng}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../business', business.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'business/'+ business.id + '/edit'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'business/'+ business.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
