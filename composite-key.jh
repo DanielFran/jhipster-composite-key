@@ -1,0 +1,38 @@
+entity Business {
+	name String required
+    phone String required
+    email String required
+    fax String
+    country String required
+    city String required
+	postalCode String required
+    address1 String required
+    address2 String
+    lat Long
+    lng Long
+}
+
+entity BasicIndex {
+	name String required
+    nickname String required
+    description String required
+}
+
+entity BusinessBasicIndex{
+	year Integer required
+    month Integer min(1) max(12)
+    value Integer required min(0)
+}
+
+relationship ManyToOne {
+	BusinessBasicIndex{business(name) required} to Business
+}
+
+relationship ManyToOne {
+	BusinessBasicIndex{basicIndex(name) required} to BasicIndex
+}
+
+microservice * with businessman
+dto * with mapstruct
+service all with serviceImpl
+filter BusinessBasicIndex
