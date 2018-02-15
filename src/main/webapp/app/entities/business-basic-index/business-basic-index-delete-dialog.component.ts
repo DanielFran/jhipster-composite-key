@@ -27,8 +27,8 @@ export class BusinessBasicIndexDeleteDialogComponent {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete(id: number) {
-        this.businessBasicIndexService.delete(id).subscribe((response) => {
+    confirmDelete(businessId: number, basicIndexId: number, year: number) {
+        this.businessBasicIndexService.delete(businessId, basicIndexId, year).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'businessBasicIndexListModification',
                 content: 'Deleted an businessBasicIndex'
@@ -54,7 +54,7 @@ export class BusinessBasicIndexDeletePopupComponent implements OnInit, OnDestroy
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
             this.businessBasicIndexPopupService
-                .open(BusinessBasicIndexDeleteDialogComponent as Component, params['id']);
+                .open(BusinessBasicIndexDeleteDialogComponent as Component, params['businessId'], params['basicIndexId'], params['year']);
         });
     }
 

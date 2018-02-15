@@ -1,13 +1,10 @@
 package com.jhipster.compositekey.service.dto;
 
-import java.io.Serializable;
-import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
-import io.github.jhipster.service.filter.StringFilter;
+
+import java.io.Serializable;
 
 
 
@@ -26,8 +23,6 @@ public class BusinessBasicIndexCriteria implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    private LongFilter id;
-
     private IntegerFilter year;
 
     private IntegerFilter month;
@@ -39,14 +34,6 @@ public class BusinessBasicIndexCriteria implements Serializable {
     private LongFilter basicIndexId;
 
     public BusinessBasicIndexCriteria() {
-    }
-
-    public LongFilter getId() {
-        return id;
-    }
-
-    public void setId(LongFilter id) {
-        this.id = id;
     }
 
     public IntegerFilter getYear() {
@@ -92,12 +79,11 @@ public class BusinessBasicIndexCriteria implements Serializable {
     @Override
     public String toString() {
         return "BusinessBasicIndexCriteria{" +
-                (id != null ? "id=" + id + ", " : "") +
-                (year != null ? "year=" + year + ", " : "") +
-                (month != null ? "month=" + month + ", " : "") +
-                (value != null ? "value=" + value + ", " : "") +
-                (businessId != null ? "businessId=" + businessId + ", " : "") +
-                (basicIndexId != null ? "basicIndexId=" + basicIndexId + ", " : "") +
+            (year != null ? "year=" + year + ", " : "") +
+            (month != null ? "month=" + month + ", " : "") +
+            (value != null ? "value=" + value + ", " : "") +
+            (businessId != null ? "businessId=" + businessId + ", " : "") +
+            (basicIndexId != null ? "basicIndexId=" + basicIndexId + ", " : "") +
             "}";
     }
 

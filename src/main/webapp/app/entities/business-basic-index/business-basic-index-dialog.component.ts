@@ -48,14 +48,17 @@ export class BusinessBasicIndexDialogComponent implements OnInit {
     }
 
     save() {
+        // TODO: yelhouti: check how to do this
         this.isSaving = true;
-        if (this.businessBasicIndex.id !== undefined) {
-            this.subscribeToSaveResponse(
+        // if (this.businessBasicIndex.id !== undefined) {
+        //     this.subscribeToSaveResponse(
+        //         this.businessBasicIndexService.update(this.businessBasicIndex));
+        // } else {
+        //     this.subscribeToSaveResponse(
+        //         this.businessBasicIndexService.create(this.businessBasicIndex));
+        // }
+        this.subscribeToSaveResponse(
                 this.businessBasicIndexService.update(this.businessBasicIndex));
-        } else {
-            this.subscribeToSaveResponse(
-                this.businessBasicIndexService.create(this.businessBasicIndex));
-        }
     }
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<BusinessBasicIndex>>) {
@@ -101,9 +104,9 @@ export class BusinessBasicIndexPopupComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
-            if ( params['id'] ) {
+            if ( params['businessId'] && params['basicIndexId'] && params['year'] ) {
                 this.businessBasicIndexPopupService
-                    .open(BusinessBasicIndexDialogComponent as Component, params['id']);
+                    .open(BusinessBasicIndexDialogComponent as Component, params['businessId'], params['basicIndexId'], params['year']);
             } else {
                 this.businessBasicIndexPopupService
                     .open(BusinessBasicIndexDialogComponent as Component);

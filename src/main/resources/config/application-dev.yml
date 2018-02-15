@@ -42,7 +42,7 @@ spring:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
-        password:
+        password: toor
         hikari:
             data-source-properties:
                 cachePrepStmts: true

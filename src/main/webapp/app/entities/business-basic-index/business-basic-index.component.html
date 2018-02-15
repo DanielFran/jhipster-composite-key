@@ -16,21 +16,16 @@
         <table class="table table-striped">
             <thead>
             <tr>
-            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="jhipsterApp.businessBasicIndex.business">Business</span></th>
+            <th><span jhiTranslate="jhipsterApp.businessBasicIndex.basicIndex">Basic Index</span></th>
             <th><span jhiTranslate="jhipsterApp.businessBasicIndex.year">Year</span></th>
             <th><span jhiTranslate="jhipsterApp.businessBasicIndex.month">Month</span></th>
             <th><span jhiTranslate="jhipsterApp.businessBasicIndex.value">Value</span></th>
-            <th><span jhiTranslate="jhipsterApp.businessBasicIndex.business">Business</span></th>
-            <th><span jhiTranslate="jhipsterApp.businessBasicIndex.basicIndex">Basic Index</span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let businessBasicIndex of businessBasicIndices ;trackBy: trackId">
-                <td><a [routerLink]="['../business-basic-index', businessBasicIndex.id ]">{{businessBasicIndex.id}}</a></td>
-                <td>{{businessBasicIndex.year}}</td>
-                <td>{{businessBasicIndex.month}}</td>
-                <td>{{businessBasicIndex.value}}</td>
                 <td>
                     <div *ngIf="businessBasicIndex.businessId">
                         <a [routerLink]="['../business', businessBasicIndex.businessId  ]" >{{businessBasicIndex.businessName}}</a>
@@ -41,16 +36,19 @@
                         <a [routerLink]="['../basic-index', businessBasicIndex.basicIndexId  ]" >{{businessBasicIndex.basicIndexName}}</a>
                     </div>
                 </td>
+                <td>{{businessBasicIndex.year}}</td>
+                <td>{{businessBasicIndex.month}}</td>
+                <td>{{businessBasicIndex.value}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../business-basic-index', businessBasicIndex.id ]"
+                                [routerLink]="['../business-basic-index', businessBasicIndex.businessId, businessBasicIndex.basicIndexId, businessBasicIndex.year ]"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'business-basic-index/'+ businessBasicIndex.id + '/edit'} }]"
+                                [routerLink]="['/', { outlets: { popup: 'business-basic-index/'+ businessBasicIndex.businessId + '/' + businessBasicIndex.basicIndexId + '/' +businessBasicIndex.year + '/edit'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-primary btn-sm">
@@ -58,7 +56,7 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'business-basic-index/'+ businessBasicIndex.id + '/delete'} }]"
+                                [routerLink]="['/', { outlets: { popup: 'business-basic-index/'+ businessBasicIndex.businessId + '/' + businessBasicIndex.basicIndexId + '/' +businessBasicIndex.year + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">

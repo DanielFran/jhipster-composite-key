@@ -1,7 +1,10 @@
 package com.jhipster.compositekey.service;
 
+import com.jhipster.compositekey.domain.BusinessBasicIndexId;
 import com.jhipster.compositekey.service.dto.BusinessBasicIndexDTO;
+
 import java.util.List;
+
 
 /**
  * Service Interface for managing BusinessBasicIndex.
@@ -29,12 +32,12 @@ public interface BusinessBasicIndexService {
      * @param id the id of the entity
      * @return the entity
      */
-    BusinessBasicIndexDTO findOne(Long id);
+    BusinessBasicIndexDTO findOne(BusinessBasicIndexId id);
 
     /**
      * Delete the "id" businessBasicIndex.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(BusinessBasicIndexId id);
 }

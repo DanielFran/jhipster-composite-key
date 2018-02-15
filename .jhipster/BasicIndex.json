@@ -24,7 +24,7 @@
             ]
         }
     ],
-    "changelogDate": "20180214220050",
+    "changelogDate": "20180213001610",
     "entityTableName": "basic_index",
     "dto": "mapstruct",
     "pagination": "no",

@@ -12,8 +12,6 @@ import java.util.Objects;
  */
 public class BusinessBasicIndexDTO implements Serializable {
 
-    private Long id;
-
     @NotNull
     private Integer year;
 
@@ -32,14 +30,6 @@ public class BusinessBasicIndexDTO implements Serializable {
     private Long basicIndexId;
 
     private String basicIndexName;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Integer getYear() {
         return year;
@@ -107,21 +97,25 @@ public class BusinessBasicIndexDTO implements Serializable {
         }
 
         BusinessBasicIndexDTO businessBasicIndexDTO = (BusinessBasicIndexDTO) o;
-        if(businessBasicIndexDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), businessBasicIndexDTO.getId());
+        return Objects.equals(businessId, businessBasicIndexDTO.businessId)
+            && Objects.equals(basicIndexId, businessBasicIndexDTO.basicIndexId)
+            && Objects.equals(year, businessBasicIndexDTO.year)
+            ;
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        int result = 17;
+        result = 31 * result + businessId.hashCode();
+        result = 31 * result + basicIndexId.hashCode();
+        result = 31 * result + year.hashCode();
+        return result;
     }
 
     @Override
     public String toString() {
         return "BusinessBasicIndexDTO{" +
-            "id=" + getId() +
             ", year=" + getYear() +
             ", month=" + getMonth() +
             ", value=" + getValue() +

@@ -45,7 +45,7 @@ businessBasicIndices: BusinessBasicIndex[];
     }
 
     trackId(index: number, item: BusinessBasicIndex) {
-        return item.id;
+        return item.businessName + ',' + item.basicIndexName + ',' + item.year;
     }
     registerChangeInBusinessBasicIndices() {
         this.eventSubscriber = this.eventManager.subscribe('businessBasicIndexListModification', (response) => this.loadAll());

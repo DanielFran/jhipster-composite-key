@@ -16,6 +16,7 @@ export class BusinessBasicIndexDetailComponent implements OnInit, OnDestroy {
     businessBasicIndex: BusinessBasicIndex;
     private subscription: Subscription;
     private eventSubscriber: Subscription;
+    private disabledId: boolean;
 
     constructor(
         private eventManager: JhiEventManager,
@@ -26,13 +27,14 @@ export class BusinessBasicIndexDetailComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.subscription = this.route.params.subscribe((params) => {
-            this.load(params['id']);
+            this.load(params['businessId'], params['basicIndexId'], params['year']);
+            this.disabledId = (params['businessId'] && params['basicIndexId'] && params['year']);
         });
         this.registerChangeInBusinessBasicIndices();
     }
 
-    load(id) {
-        this.businessBasicIndexService.find(id)
+    load(businessId: number, basicIndexId: number, year: number) {
+        this.businessBasicIndexService.find(businessId, basicIndexId, year)
             .subscribe((businessBasicIndexResponse: HttpResponse<BusinessBasicIndex>) => {
                 this.businessBasicIndex = businessBasicIndexResponse.body;
             });
@@ -49,7 +51,7 @@ export class BusinessBasicIndexDetailComponent implements OnInit, OnDestroy {
     registerChangeInBusinessBasicIndices() {
         this.eventSubscriber = this.eventManager.subscribe(
             'businessBasicIndexListModification',
-            (response) => this.load(this.businessBasicIndex.id)
+            (response) => this.load(this.businessBasicIndex.businessId, this.businessBasicIndex.basicIndexId, this.businessBasicIndex.year)
         );
     }
 }

@@ -1,8 +1,11 @@
 package com.jhipster.compositekey.service;
 
-
-import java.util.List;
-
+import com.jhipster.compositekey.domain.*;
+import com.jhipster.compositekey.repository.BusinessBasicIndexRepository;
+import com.jhipster.compositekey.service.dto.BusinessBasicIndexCriteria;
+import com.jhipster.compositekey.service.dto.BusinessBasicIndexDTO;
+import com.jhipster.compositekey.service.mapper.BusinessBasicIndexMapper;
+import io.github.jhipster.service.QueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -11,15 +14,7 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.github.jhipster.service.QueryService;
-
-import com.jhipster.compositekey.domain.BusinessBasicIndex;
-import com.jhipster.compositekey.domain.*; // for static metamodels
-import com.jhipster.compositekey.repository.BusinessBasicIndexRepository;
-import com.jhipster.compositekey.service.dto.BusinessBasicIndexCriteria;
-
-import com.jhipster.compositekey.service.dto.BusinessBasicIndexDTO;
-import com.jhipster.compositekey.service.mapper.BusinessBasicIndexMapper;
+import java.util.List;
 
 /**
  * Service for executing complex queries for BusinessBasicIndex entities in the database.
@@ -75,11 +70,8 @@ public class BusinessBasicIndexQueryService extends QueryService<BusinessBasicIn
     private Specifications<BusinessBasicIndex> createSpecification(BusinessBasicIndexCriteria criteria) {
         Specifications<BusinessBasicIndex> specification = Specifications.where(null);
         if (criteria != null) {
-            if (criteria.getId() != null) {
-                specification = specification.and(buildSpecification(criteria.getId(), BusinessBasicIndex_.id));
-            }
             if (criteria.getYear() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getYear(), BusinessBasicIndex_.year));
+                specification = specification.and(buildReferringEntitySpecification(criteria.getYear(), BusinessBasicIndex_.id, BusinessBasicIndexId_.year));
             }
             if (criteria.getMonth() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getMonth(), BusinessBasicIndex_.month));

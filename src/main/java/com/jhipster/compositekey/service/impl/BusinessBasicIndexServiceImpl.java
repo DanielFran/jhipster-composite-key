@@ -1,8 +1,9 @@
 package com.jhipster.compositekey.service.impl;
 
-import com.jhipster.compositekey.service.BusinessBasicIndexService;
 import com.jhipster.compositekey.domain.BusinessBasicIndex;
+import com.jhipster.compositekey.domain.BusinessBasicIndexId;
 import com.jhipster.compositekey.repository.BusinessBasicIndexRepository;
+import com.jhipster.compositekey.service.BusinessBasicIndexService;
 import com.jhipster.compositekey.service.dto.BusinessBasicIndexDTO;
 import com.jhipster.compositekey.service.mapper.BusinessBasicIndexMapper;
 import org.slf4j.Logger;
@@ -68,7 +69,7 @@ public class BusinessBasicIndexServiceImpl implements BusinessBasicIndexService 
      */
     @Override
     @Transactional(readOnly = true)
-    public BusinessBasicIndexDTO findOne(Long id) {
+    public BusinessBasicIndexDTO findOne(BusinessBasicIndexId id) {
         log.debug("Request to get BusinessBasicIndex : {}", id);
         BusinessBasicIndex businessBasicIndex = businessBasicIndexRepository.findOne(id);
         return businessBasicIndexMapper.toDto(businessBasicIndex);
@@ -80,7 +81,7 @@ public class BusinessBasicIndexServiceImpl implements BusinessBasicIndexService 
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(BusinessBasicIndexId id) {
         log.debug("Request to delete BusinessBasicIndex : {}", id);
         businessBasicIndexRepository.delete(id);
     }

@@ -7,6 +7,7 @@ import com.jhipster.compositekey.domain.Business;
 import com.jhipster.compositekey.domain.BasicIndex;
 import com.jhipster.compositekey.repository.BusinessBasicIndexRepository;
 import com.jhipster.compositekey.service.BusinessBasicIndexService;
+import com.jhipster.compositekey.repository.search.BusinessBasicIndexSearchRepository;
 import com.jhipster.compositekey.service.dto.BusinessBasicIndexDTO;
 import com.jhipster.compositekey.service.mapper.BusinessBasicIndexMapper;
 import com.jhipster.compositekey.web.rest.errors.ExceptionTranslator;
@@ -64,6 +65,9 @@ public class BusinessBasicIndexResourceIntTest {
     private BusinessBasicIndexService businessBasicIndexService;
 
     @Autowired
+    private BusinessBasicIndexSearchRepository businessBasicIndexSearchRepository;
+
+    @Autowired
     private BusinessBasicIndexQueryService businessBasicIndexQueryService;
 
     @Autowired
@@ -119,6 +123,7 @@ public class BusinessBasicIndexResourceIntTest {
 
     @Before
     public void initTest() {
+        businessBasicIndexSearchRepository.deleteAll();
         businessBasicIndex = createEntity(em);
     }
 
@@ -141,6 +146,10 @@ public class BusinessBasicIndexResourceIntTest {
         assertThat(testBusinessBasicIndex.getYear()).isEqualTo(DEFAULT_YEAR);
         assertThat(testBusinessBasicIndex.getMonth()).isEqualTo(DEFAULT_MONTH);
         assertThat(testBusinessBasicIndex.getValue()).isEqualTo(DEFAULT_VALUE);
+
+        // Validate the BusinessBasicIndex in Elasticsearch
+        BusinessBasicIndex businessBasicIndexEs = businessBasicIndexSearchRepository.findOne(testBusinessBasicIndex.getId());
+        assertThat(businessBasicIndexEs).isEqualToIgnoringGivenFields(testBusinessBasicIndex);
     }
 
     @Test
@@ -506,6 +515,7 @@ public class BusinessBasicIndexResourceIntTest {
     public void updateBusinessBasicIndex() throws Exception {
         // Initialize the database
         businessBasicIndexRepository.saveAndFlush(businessBasicIndex);
+        businessBasicIndexSearchRepository.save(businessBasicIndex);
         int databaseSizeBeforeUpdate = businessBasicIndexRepository.findAll().size();
 
         // Update the businessBasicIndex
@@ -530,6 +540,10 @@ public class BusinessBasicIndexResourceIntTest {
         assertThat(testBusinessBasicIndex.getYear()).isEqualTo(UPDATED_YEAR);
         assertThat(testBusinessBasicIndex.getMonth()).isEqualTo(UPDATED_MONTH);
         assertThat(testBusinessBasicIndex.getValue()).isEqualTo(UPDATED_VALUE);
+
+        // Validate the BusinessBasicIndex in Elasticsearch
+        BusinessBasicIndex businessBasicIndexEs = businessBasicIndexSearchRepository.findOne(testBusinessBasicIndex.getId());
+        assertThat(businessBasicIndexEs).isEqualToIgnoringGivenFields(testBusinessBasicIndex);
     }
 
     @Test
@@ -556,6 +570,7 @@ public class BusinessBasicIndexResourceIntTest {
     public void deleteBusinessBasicIndex() throws Exception {
         // Initialize the database
         businessBasicIndexRepository.saveAndFlush(businessBasicIndex);
+        businessBasicIndexSearchRepository.save(businessBasicIndex);
         int databaseSizeBeforeDelete = businessBasicIndexRepository.findAll().size();
 
         // Get the businessBasicIndex
@@ -563,9 +578,30 @@ public class BusinessBasicIndexResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean businessBasicIndexExistsInEs = businessBasicIndexSearchRepository.exists(businessBasicIndex.getId());
+        assertThat(businessBasicIndexExistsInEs).isFalse();
+
         // Validate the database is empty
         List<BusinessBasicIndex> businessBasicIndexList = businessBasicIndexRepository.findAll();
         assertThat(businessBasicIndexList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchBusinessBasicIndex() throws Exception {
+        // Initialize the database
+        businessBasicIndexRepository.saveAndFlush(businessBasicIndex);
+        businessBasicIndexSearchRepository.save(businessBasicIndex);
+
+        // Search the businessBasicIndex
+        restBusinessBasicIndexMockMvc.perform(get("/api/_search/business-basic-indices?query=id:" + businessBasicIndex.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(businessBasicIndex.getId().intValue())))
+            .andExpect(jsonPath("$.[*].year").value(hasItem(DEFAULT_YEAR)))
+            .andExpect(jsonPath("$.[*].month").value(hasItem(DEFAULT_MONTH)))
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)));
     }
 
     @Test

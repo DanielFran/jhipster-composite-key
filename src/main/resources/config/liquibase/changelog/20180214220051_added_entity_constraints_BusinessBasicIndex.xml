@@ -6,8 +6,8 @@
     <!--
         Added the constraints for entity BusinessBasicIndex.
     -->
-    <changeSet id="20180214220051-2" author="jhipster">
-        
+    <changeSet id="20180213001611-2" author="jhipster">
+
         <addForeignKeyConstraint baseColumnNames="business_id"
                                  baseTableName="business_basic_index"
                                  constraintName="fk_business_basic_index_business_id"

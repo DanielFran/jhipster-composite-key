@@ -38,7 +38,7 @@ describe('Component Tests', () => {
                 // GIVEN
 
                 spyOn(service, 'find').and.returnValue(Observable.of(new HttpResponse({
-                    body: new BusinessBasicIndex(123)
+                    body: new BusinessBasicIndex(11, 22, 33)
                 })));
 
                 // WHEN
@@ -46,7 +46,7 @@ describe('Component Tests', () => {
 
                 // THEN
                 expect(service.find).toHaveBeenCalledWith(123);
-                expect(comp.businessBasicIndex).toEqual(jasmine.objectContaining({id: 123}));
+                expect(comp.businessBasicIndex).toEqual(jasmine.objectContaining({businessId: 11, basicIndexId: 22, year: 33}));
             });
         });
     });

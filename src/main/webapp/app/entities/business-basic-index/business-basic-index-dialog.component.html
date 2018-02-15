@@ -7,15 +7,36 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <div class="form-group" [hidden]="!businessBasicIndex.id">
-            <label for="id" jhiTranslate="global.field.id">ID</label>
-            <input type="text" class="form-control" id="id" name="id"
-                   [(ngModel)]="businessBasicIndex.id" readonly />
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="jhipsterApp.businessBasicIndex.business" for="field_business">Business</label>
+            <select class="form-control" id="field_business" name="business" [(ngModel)]="businessBasicIndex.businessId"  required [disabled]="disabledId">
+                <option *ngIf="!editForm.value.business" [ngValue]="null" selected></option>
+                <option [ngValue]="businessOption.id" *ngFor="let businessOption of businesses; trackBy: trackBusinessById">{{businessOption.name}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.business?.dirty && editForm.controls.business?.invalid)">
+            <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.business?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="jhipsterApp.businessBasicIndex.basicIndex" for="field_basicIndex">Basic Index</label>
+            <select class="form-control" id="field_basicIndex" name="basicIndex" [(ngModel)]="businessBasicIndex.basicIndexId"  required [disabled]="disabledId">
+                <option *ngIf="!editForm.value.basicIndex" [ngValue]="null" selected></option>
+                <option [ngValue]="basicIndexOption.id" *ngFor="let basicIndexOption of basicindices; trackBy: trackBasicIndexById">{{basicIndexOption.name}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.basicIndex?.dirty && editForm.controls.basicIndex?.invalid)">
+            <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.basicIndex?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="jhipsterApp.businessBasicIndex.year" for="field_year">Year</label>
             <input type="number" class="form-control" name="year" id="field_year"
-                [(ngModel)]="businessBasicIndex.year" required/>
+                [(ngModel)]="businessBasicIndex.year" required [disabled]="disabledId"/>
             <div [hidden]="!(editForm.controls.year?.dirty && editForm.controls.year?.invalid)">
                 <small class="form-text text-danger"
                    [hidden]="!editForm.controls.year?.errors?.required" jhiTranslate="entity.validation.required">
@@ -66,32 +87,6 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="jhipsterApp.businessBasicIndex.business" for="field_business">Business</label>
-            <select class="form-control" id="field_business" name="business" [(ngModel)]="businessBasicIndex.businessId"  required>
-                <option *ngIf="!editForm.value.business" [ngValue]="null" selected></option>
-                <option [ngValue]="businessOption.id" *ngFor="let businessOption of businesses; trackBy: trackBusinessById">{{businessOption.name}}</option>
-            </select>
-        </div>
-        <div [hidden]="!(editForm.controls.business?.dirty && editForm.controls.business?.invalid)">
-            <small class="form-text text-danger"
-                [hidden]="!editForm.controls.business?.errors?.required" jhiTranslate="entity.validation.required">
-                This field is required.
-            </small>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="jhipsterApp.businessBasicIndex.basicIndex" for="field_basicIndex">Basic Index</label>
-            <select class="form-control" id="field_basicIndex" name="basicIndex" [(ngModel)]="businessBasicIndex.basicIndexId"  required>
-                <option *ngIf="!editForm.value.basicIndex" [ngValue]="null" selected></option>
-                <option [ngValue]="basicIndexOption.id" *ngFor="let basicIndexOption of basicindices; trackBy: trackBasicIndexById">{{basicIndexOption.name}}</option>
-            </select>
-        </div>
-        <div [hidden]="!(editForm.controls.basicIndex?.dirty && editForm.controls.basicIndex?.invalid)">
-            <small class="form-text text-danger"
-                [hidden]="!editForm.controls.basicIndex?.errors?.required" jhiTranslate="entity.validation.required">
-                This field is required.
-            </small>
-        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">

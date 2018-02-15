@@ -48,7 +48,7 @@ describe('Component Tests', () => {
                 inject([],
                     fakeAsync(() => {
                         // GIVEN
-                        const entity = new BusinessBasicIndex(123);
+                        const entity = new BusinessBasicIndex(11, 22, 33);
                         spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({body: entity})));
                         comp.businessBasicIndex = entity;
                         // WHEN

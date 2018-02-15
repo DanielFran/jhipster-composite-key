@@ -1,12 +1,12 @@
 package com.jhipster.compositekey.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.jhipster.compositekey.service.BusinessBasicIndexService;
-import com.jhipster.compositekey.web.rest.errors.BadRequestAlertException;
-import com.jhipster.compositekey.web.rest.util.HeaderUtil;
-import com.jhipster.compositekey.service.dto.BusinessBasicIndexDTO;
-import com.jhipster.compositekey.service.dto.BusinessBasicIndexCriteria;
+import com.jhipster.compositekey.domain.BusinessBasicIndexId;
 import com.jhipster.compositekey.service.BusinessBasicIndexQueryService;
+import com.jhipster.compositekey.service.BusinessBasicIndexService;
+import com.jhipster.compositekey.service.dto.BusinessBasicIndexCriteria;
+import com.jhipster.compositekey.service.dto.BusinessBasicIndexDTO;
+import com.jhipster.compositekey.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,12 +51,10 @@ public class BusinessBasicIndexResource {
     @Timed
     public ResponseEntity<BusinessBasicIndexDTO> createBusinessBasicIndex(@Valid @RequestBody BusinessBasicIndexDTO businessBasicIndexDTO) throws URISyntaxException {
         log.debug("REST request to save BusinessBasicIndex : {}", businessBasicIndexDTO);
-        if (businessBasicIndexDTO.getId() != null) {
-            throw new BadRequestAlertException("A new businessBasicIndex cannot already have an ID", ENTITY_NAME, "idexists");
-        }
+        //TODO yelhouti: how to make sure it's insert
         BusinessBasicIndexDTO result = businessBasicIndexService.save(businessBasicIndexDTO);
-        return ResponseEntity.created(new URI("/api/business-basic-indices/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+        return ResponseEntity.created(new URI("/api/business-basic-indices" + "/"+result.getBusinessId()+"/"+result.getBasicIndexId()+"/"+result.getYear()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, "/"+result.getBusinessId()+"/"+result.getBasicIndexId()+"/"+result.getYear()))
             .body(result);
     }
 
@@ -73,12 +71,10 @@ public class BusinessBasicIndexResource {
     @Timed
     public ResponseEntity<BusinessBasicIndexDTO> updateBusinessBasicIndex(@Valid @RequestBody BusinessBasicIndexDTO businessBasicIndexDTO) throws URISyntaxException {
         log.debug("REST request to update BusinessBasicIndex : {}", businessBasicIndexDTO);
-        if (businessBasicIndexDTO.getId() == null) {
-            return createBusinessBasicIndex(businessBasicIndexDTO);
-        }
+        //TODO yelhouti: how to make sure it's update
         BusinessBasicIndexDTO result = businessBasicIndexService.save(businessBasicIndexDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, businessBasicIndexDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, "/"+businessBasicIndexDTO.getBusinessId()+"/"+businessBasicIndexDTO.getBasicIndexId()+"/"+businessBasicIndexDTO.getYear()))
             .body(result);
     }
 
@@ -99,12 +95,15 @@ public class BusinessBasicIndexResource {
     /**
      * GET  /business-basic-indices/:id : get the "id" businessBasicIndex.
      *
-     * @param id the id of the businessBasicIndexDTO to retrieve
+     * @param businessId the businessId of the businessBasicIndexDTO to retrieve
+     * @param basicIndexId the basicIndexId of the businessBasicIndexDTO to retrieve
+     * @param year the year of the businessBasicIndexDTO to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the businessBasicIndexDTO, or with status 404 (Not Found)
      */
-    @GetMapping("/business-basic-indices/{id}")
+    @GetMapping("/business-basic-indices/{businessId}/{basicIndexId}/{year}")
     @Timed
-    public ResponseEntity<BusinessBasicIndexDTO> getBusinessBasicIndex(@PathVariable Long id) {
+    public ResponseEntity<BusinessBasicIndexDTO> getBusinessBasicIndex(@PathVariable Long businessId, @PathVariable Long basicIndexId, @PathVariable Integer year) {
+        BusinessBasicIndexId id = new BusinessBasicIndexId(businessId, basicIndexId, year);
         log.debug("REST request to get BusinessBasicIndex : {}", id);
         BusinessBasicIndexDTO businessBasicIndexDTO = businessBasicIndexService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(businessBasicIndexDTO));
@@ -113,12 +112,15 @@ public class BusinessBasicIndexResource {
     /**
      * DELETE  /business-basic-indices/:id : delete the "id" businessBasicIndex.
      *
-     * @param id the id of the businessBasicIndexDTO to delete
+     * @param businessId the businessId of the businessBasicIndexDTO to retrieve
+     * @param basicIndexId the basicIndexId of the businessBasicIndexDTO to retrieve
+     * @param year the year of the businessBasicIndexDTO to retrieve
      * @return the ResponseEntity with status 200 (OK)
      */
-    @DeleteMapping("/business-basic-indices/{id}")
+    @DeleteMapping("/business-basic-indices/{businessId}/{basicIndexId}/{year}")
     @Timed
-    public ResponseEntity<Void> deleteBusinessBasicIndex(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBusinessBasicIndex(@PathVariable Long businessId, @PathVariable Long basicIndexId, @PathVariable Integer year) {
+        BusinessBasicIndexId id = new BusinessBasicIndexId(businessId, basicIndexId, year);
         log.debug("REST request to delete BusinessBasicIndex : {}", id);
         businessBasicIndexService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

@@ -38,7 +38,7 @@ describe('Component Tests', () => {
                 // GIVEN
                 const headers = new HttpHeaders().append('link', 'link;link');
                 spyOn(service, 'query').and.returnValue(Observable.of(new HttpResponse({
-                    body: [new BusinessBasicIndex(123)],
+                    body: [new BusinessBasicIndex(11, 22 ,33)],
                     headers
                 })));
 
@@ -47,7 +47,7 @@ describe('Component Tests', () => {
 
                 // THEN
                 expect(service.query).toHaveBeenCalled();
-                expect(comp.businessBasicIndices[0]).toEqual(jasmine.objectContaining({id: 123}));
+                expect(comp.businessBasicIndices[0]).toEqual(jasmine.objectContaining({businessId: 11, basicIndexId: 22, year: 33}));
             });
         });
     });

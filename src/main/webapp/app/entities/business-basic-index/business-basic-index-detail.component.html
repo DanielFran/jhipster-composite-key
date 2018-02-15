@@ -1,21 +1,9 @@
 
 <div *ngIf="businessBasicIndex">
-    <h2><span jhiTranslate="jhipsterApp.businessBasicIndex.detail.title">Business Basic Index</span> {{businessBasicIndex.id}}</h2>
+    <h2><span jhiTranslate="jhipsterApp.businessBasicIndex.detail.title">Business Basic Index</span> {{businessBasicIndex.businessId + '/' + businessBasicIndex.basicIndexId + '/' +businessBasicIndex.year}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="jhipsterApp.businessBasicIndex.year">Year</span></dt>
-        <dd>
-            <span>{{businessBasicIndex.year}}</span>
-        </dd>
-        <dt><span jhiTranslate="jhipsterApp.businessBasicIndex.month">Month</span></dt>
-        <dd>
-            <span>{{businessBasicIndex.month}}</span>
-        </dd>
-        <dt><span jhiTranslate="jhipsterApp.businessBasicIndex.value">Value</span></dt>
-        <dd>
-            <span>{{businessBasicIndex.value}}</span>
-        </dd>
         <dt><span jhiTranslate="jhipsterApp.businessBasicIndex.business">Business</span></dt>
         <dd>
             <div *ngIf="businessBasicIndex.businessId">
@@ -28,6 +16,18 @@
                 <a [routerLink]="['/basic-index', businessBasicIndex.basicIndexId]">{{businessBasicIndex.basicIndexName}}</a>
             </div>
         </dd>
+        <dt><span jhiTranslate="jhipsterApp.businessBasicIndex.year">Year</span></dt>
+        <dd>
+            <span>{{businessBasicIndex.year}}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterApp.businessBasicIndex.month">Month</span></dt>
+        <dd>
+            <span>{{businessBasicIndex.month}}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterApp.businessBasicIndex.value">Value</span></dt>
+        <dd>
+            <span>{{businessBasicIndex.value}}</span>
+        </dd>
     </dl>
 
     <button type="submit"
@@ -37,7 +37,7 @@
     </button>
 
     <button type="button"
-            [routerLink]="['/', { outlets: { popup: 'business-basic-index/'+ businessBasicIndex.id + '/edit'} }]"
+            [routerLink]="['/', { outlets: { popup: 'business-basic-index/' + businessBasicIndex.businessId + '/' + businessBasicIndex.basicIndexId + '/' +businessBasicIndex.year + '/edit'} }]"
             replaceUrl="true"
             queryParamsHandling="merge"
             class="btn btn-primary">

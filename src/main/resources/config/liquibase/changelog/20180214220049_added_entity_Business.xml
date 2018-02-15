@@ -17,7 +17,7 @@
     <!--
         Added the entity Business.
     -->
-    <changeSet id="20180214220049-1" author="jhipster">
+    <changeSet id="20180213001609-1" author="jhipster">
         <createTable tableName="business">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -68,7 +68,7 @@
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

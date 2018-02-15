@@ -1,13 +1,14 @@
 import { BaseEntity } from './../../shared';
 
-export class BusinessBasicIndex implements BaseEntity {
+export class BusinessBasicIndex {
     constructor(
-        public id?: number,
-        public year?: number,
-        public month?: number,
-        public value?: number,
         public businessId?: number,
         public basicIndexId?: number,
+        public year?: number,
+        public businessName?: string,
+        public basicIndexName?: string,
+        public month?: number,
+        public value?: number,
     ) {
     }
 }

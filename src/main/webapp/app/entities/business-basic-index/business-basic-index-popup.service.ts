@@ -18,15 +18,15 @@ export class BusinessBasicIndexPopupService {
         this.ngbModalRef = null;
     }
 
-    open(component: Component, id?: number | any): Promise<NgbModalRef> {
+    open(component: Component, businessId?: number, basicIndexId?: number, year?: number): Promise<NgbModalRef> {
         return new Promise<NgbModalRef>((resolve, reject) => {
             const isOpen = this.ngbModalRef !== null;
             if (isOpen) {
                 resolve(this.ngbModalRef);
             }
 
-            if (id) {
-                this.businessBasicIndexService.find(id)
+            if (businessId && basicIndexId && year) {
+                this.businessBasicIndexService.find(businessId, basicIndexId, year)
                     .subscribe((businessBasicIndexResponse: HttpResponse<BusinessBasicIndex>) => {
                         const businessBasicIndex: BusinessBasicIndex = businessBasicIndexResponse.body;
                         this.ngbModalRef = this.businessBasicIndexModalRef(component, businessBasicIndex);

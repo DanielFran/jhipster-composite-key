@@ -27,8 +27,8 @@ export class BusinessBasicIndexService {
             .map((res: EntityResponseType) => this.convertResponse(res));
     }
 
-    find(id: number): Observable<EntityResponseType> {
-        return this.http.get<BusinessBasicIndex>(`${this.resourceUrl}/${id}`, { observe: 'response'})
+    find(businessId: number, basicIndexId: number, year: number): Observable<EntityResponseType> {
+        return this.http.get<BusinessBasicIndex>(`${this.resourceUrl}/${businessId}/${basicIndexId}/${year}`, { observe: 'response'})
             .map((res: EntityResponseType) => this.convertResponse(res));
     }
 
@@ -38,8 +38,8 @@ export class BusinessBasicIndexService {
             .map((res: HttpResponse<BusinessBasicIndex[]>) => this.convertArrayResponse(res));
     }
 
-    delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+    delete(businessId: number, basicIndexId: number, year: number): Observable<HttpResponse<any>> {
+        return this.http.delete<any>(`${this.resourceUrl}/${businessId}/${basicIndexId}/${year}`, { observe: 'response'});
     }
 
     private convertResponse(res: EntityResponseType): EntityResponseType {

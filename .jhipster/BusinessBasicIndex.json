@@ -44,7 +44,7 @@
             "fieldValidateRulesMin": 0
         }
     ],
-    "changelogDate": "20180214220051",
+    "changelogDate": "20180213001611",
     "entityTableName": "business_basic_index",
     "dto": "mapstruct",
     "pagination": "no",

@@ -4,8 +4,9 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -19,13 +20,13 @@ public class BusinessBasicIndex implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotNull
-    @Column(name = "jhi_year", nullable = false)
-    private Integer year;
+    @EmbeddedId
+    @AttributeOverrides({
+        @AttributeOverride(name = "businessId", column = @Column(name = "business_id", nullable = false)),
+        @AttributeOverride(name = "basicIndexId", column = @Column(name = "basic_index_id", nullable = false)),
+        @AttributeOverride(name = "year", column = @Column(name = "jhi_year", nullable = false))
+    })
+    private BusinessBasicIndexId id;
 
     @Min(value = 1)
     @Max(value = 12)
@@ -38,33 +39,22 @@ public class BusinessBasicIndex implements Serializable {
     private Integer value;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name="business_id", insertable = false, updatable = false)
     @NotNull
     private Business business;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name="basic_index_id", insertable = false, updatable = false)
     @NotNull
     private BasicIndex basicIndex;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-    public Long getId() {
+    public BusinessBasicIndexId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(BusinessBasicIndexId id) {
         this.id = id;
-    }
-
-    public Integer getYear() {
-        return year;
-    }
-
-    public BusinessBasicIndex year(Integer year) {
-        this.year = year;
-        return this;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
     }
 
     public Integer getMonth() {
@@ -144,7 +134,6 @@ public class BusinessBasicIndex implements Serializable {
     public String toString() {
         return "BusinessBasicIndex{" +
             "id=" + getId() +
-            ", year=" + getYear() +
             ", month=" + getMonth() +
             ", value=" + getValue() +
             "}";

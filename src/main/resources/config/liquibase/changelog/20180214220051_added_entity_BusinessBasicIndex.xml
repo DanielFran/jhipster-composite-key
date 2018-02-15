@@ -17,13 +17,11 @@
     <!--
         Added the entity BusinessBasicIndex.
     -->
-    <changeSet id="20180214220051-1" author="jhipster">
+    <changeSet id="20180213001611-1" author="jhipster">
         <createTable tableName="business_basic_index">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
+
             <column name="jhi_year" type="integer">
-                <constraints nullable="false" />
+                <constraints primaryKey="true" nullable="false" />
             </column>
 
             <column name="month" type="integer">
@@ -35,16 +33,16 @@
             </column>
 
             <column name="business_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints primaryKey="true" nullable="false" />
             </column>
 
             <column name="basic_index_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints primaryKey="true" nullable="false" />
             </column>
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

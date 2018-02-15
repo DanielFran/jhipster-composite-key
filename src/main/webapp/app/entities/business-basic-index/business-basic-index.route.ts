@@ -16,7 +16,7 @@ export const businessBasicIndexRoute: Routes = [
         },
         canActivate: [UserRouteAccessService]
     }, {
-        path: 'business-basic-index/:id',
+        path: 'business-basic-index/:businessId/:basicIndexId/:year',
         component: BusinessBasicIndexDetailComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -38,7 +38,7 @@ export const businessBasicIndexPopupRoute: Routes = [
         outlet: 'popup'
     },
     {
-        path: 'business-basic-index/:id/edit',
+        path: 'business-basic-index/:businessId/:basicIndexId/:year/edit',
         component: BusinessBasicIndexPopupComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -48,7 +48,7 @@ export const businessBasicIndexPopupRoute: Routes = [
         outlet: 'popup'
     },
     {
-        path: 'business-basic-index/:id/delete',
+        path: 'business-basic-index/:businessId/:basicIndexId/:year/delete',
         component: BusinessBasicIndexDeletePopupComponent,
         data: {
             authorities: ['ROLE_USER'],
