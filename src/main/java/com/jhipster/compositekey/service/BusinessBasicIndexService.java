@@ -12,6 +12,14 @@ import java.util.List;
 public interface BusinessBasicIndexService {
 
     /**
+     * Validate if one businessBasicIndex exists.
+     *
+     * @param id the id of the entity
+     * @return boolean
+     */
+    boolean exists(BusinessBasicIndexId id);
+    
+    /**
      * Save a businessBasicIndex.
      *
      * @param businessBasicIndexDTO the entity to save

@@ -6,6 +6,7 @@ import com.jhipster.compositekey.service.BusinessBasicIndexQueryService;
 import com.jhipster.compositekey.service.BusinessBasicIndexService;
 import com.jhipster.compositekey.service.dto.BusinessBasicIndexCriteria;
 import com.jhipster.compositekey.service.dto.BusinessBasicIndexDTO;
+import com.jhipster.compositekey.web.rest.errors.BadRequestAlertException;
 import com.jhipster.compositekey.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -51,10 +52,13 @@ public class BusinessBasicIndexResource {
     @Timed
     public ResponseEntity<BusinessBasicIndexDTO> createBusinessBasicIndex(@Valid @RequestBody BusinessBasicIndexDTO businessBasicIndexDTO) throws URISyntaxException {
         log.debug("REST request to save BusinessBasicIndex : {}", businessBasicIndexDTO);
-        //TODO yelhouti: how to make sure it's insert
+        BusinessBasicIndexId id = new BusinessBasicIndexId(businessBasicIndexDTO.getBusinessId(), businessBasicIndexDTO.getBasicIndexId(), businessBasicIndexDTO.getYear());
+        if (businessBasicIndexService.exists(id)) {
+            throw new BadRequestAlertException("The businessBasicIndex already exists", ENTITY_NAME, "idexists");
+        }
         BusinessBasicIndexDTO result = businessBasicIndexService.save(businessBasicIndexDTO);
-        return ResponseEntity.created(new URI("/api/business-basic-indices" + "/"+result.getBusinessId()+"/"+result.getBasicIndexId()+"/"+result.getYear()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, "/"+result.getBusinessId()+"/"+result.getBasicIndexId()+"/"+result.getYear()))
+        return ResponseEntity.created(new URI("/api/business-basic-indices/" + result.getBusinessId() + "/" + result.getBasicIndexId()+ "/" + result.getYear()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, id.toString()))
             .body(result);
     }
 
@@ -71,10 +75,13 @@ public class BusinessBasicIndexResource {
     @Timed
     public ResponseEntity<BusinessBasicIndexDTO> updateBusinessBasicIndex(@Valid @RequestBody BusinessBasicIndexDTO businessBasicIndexDTO) throws URISyntaxException {
         log.debug("REST request to update BusinessBasicIndex : {}", businessBasicIndexDTO);
-        //TODO yelhouti: how to make sure it's update
+        BusinessBasicIndexId id = new BusinessBasicIndexId(businessBasicIndexDTO.getBusinessId(), businessBasicIndexDTO.getBasicIndexId(), businessBasicIndexDTO.getYear());
+        if (!businessBasicIndexService.exists(id)) {
+            return createBusinessBasicIndex(businessBasicIndexDTO);
+        }
         BusinessBasicIndexDTO result = businessBasicIndexService.save(businessBasicIndexDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, "/"+businessBasicIndexDTO.getBusinessId()+"/"+businessBasicIndexDTO.getBasicIndexId()+"/"+businessBasicIndexDTO.getYear()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, id.toString()))
             .body(result);
     }
 

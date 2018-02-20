@@ -1,15 +1,7 @@
 package com.jhipster.compositekey.service.dto;
 
-import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.IntegerFilter;
-import io.github.jhipster.service.filter.LongFilter;
-
 import java.io.Serializable;
-
-
-
-
-
+import io.github.jhipster.service.filter.*;
 
 /**
  * Criteria class for the BusinessBasicIndex entity. This class is used in BusinessBasicIndexResource to
@@ -22,6 +14,9 @@ import java.io.Serializable;
 public class BusinessBasicIndexCriteria implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private LongFilter businessId;
+
+    private LongFilter basicIndexId;
 
     private IntegerFilter year;
 
@@ -29,11 +24,23 @@ public class BusinessBasicIndexCriteria implements Serializable {
 
     private IntegerFilter value;
 
-    private LongFilter businessId;
-
-    private LongFilter basicIndexId;
-
     public BusinessBasicIndexCriteria() {
+    }
+
+    public LongFilter getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(LongFilter businessId) {
+        this.businessId = businessId;
+    }
+
+    public LongFilter getBasicIndexId() {
+        return basicIndexId;
+    }
+
+    public void setBasicIndexId(LongFilter basicIndexId) {
+        this.basicIndexId = basicIndexId;
     }
 
     public IntegerFilter getYear() {
@@ -60,30 +67,14 @@ public class BusinessBasicIndexCriteria implements Serializable {
         this.value = value;
     }
 
-    public LongFilter getBusinessId() {
-        return businessId;
-    }
-
-    public void setBusinessId(LongFilter businessId) {
-        this.businessId = businessId;
-    }
-
-    public LongFilter getBasicIndexId() {
-        return basicIndexId;
-    }
-
-    public void setBasicIndexId(LongFilter basicIndexId) {
-        this.basicIndexId = basicIndexId;
-    }
-
     @Override
     public String toString() {
         return "BusinessBasicIndexCriteria{" +
+            (businessId != null ? "businessId=" + businessId + ", " : "") +
+            (basicIndexId != null ? "basicIndexId=" + basicIndexId + ", " : "") +
             (year != null ? "year=" + year + ", " : "") +
             (month != null ? "month=" + month + ", " : "") +
             (value != null ? "value=" + value + ", " : "") +
-            (businessId != null ? "businessId=" + businessId + ", " : "") +
-            (basicIndexId != null ? "basicIndexId=" + basicIndexId + ", " : "") +
             "}";
     }
 

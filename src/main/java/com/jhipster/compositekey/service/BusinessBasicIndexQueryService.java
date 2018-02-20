@@ -70,6 +70,12 @@ public class BusinessBasicIndexQueryService extends QueryService<BusinessBasicIn
     private Specifications<BusinessBasicIndex> createSpecification(BusinessBasicIndexCriteria criteria) {
         Specifications<BusinessBasicIndex> specification = Specifications.where(null);
         if (criteria != null) {
+            if (criteria.getBusinessId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getBusinessId(), BusinessBasicIndex_.id, BusinessBasicIndexId_.businessId));
+            }
+            if (criteria.getBasicIndexId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getBasicIndexId(), BusinessBasicIndex_.id, BusinessBasicIndexId_.basicIndexId));
+            }
             if (criteria.getYear() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getYear(), BusinessBasicIndex_.id, BusinessBasicIndexId_.year));
             }
@@ -78,12 +84,6 @@ public class BusinessBasicIndexQueryService extends QueryService<BusinessBasicIn
             }
             if (criteria.getValue() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getValue(), BusinessBasicIndex_.value));
-            }
-            if (criteria.getBusinessId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getBusinessId(), BusinessBasicIndex_.business, Business_.id));
-            }
-            if (criteria.getBasicIndexId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getBasicIndexId(), BusinessBasicIndex_.basicIndex, BasicIndex_.id));
             }
         }
         return specification;

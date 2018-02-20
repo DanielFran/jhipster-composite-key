@@ -4,9 +4,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -47,6 +46,13 @@ public class BusinessBasicIndex implements Serializable {
     @JoinColumn(name="basic_index_id", insertable = false, updatable = false)
     @NotNull
     private BasicIndex basicIndex;
+
+    public BusinessBasicIndex() {
+    }
+
+    public BusinessBasicIndex(Long businessId, Long basicIndexId, Integer year) {
+        this.id = new BusinessBasicIndexId(businessId, basicIndexId, year);
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public BusinessBasicIndexId getId() {

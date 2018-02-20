@@ -5,9 +5,9 @@ import com.jhipster.compositekey.JhipsterApp;
 import com.jhipster.compositekey.domain.BusinessBasicIndex;
 import com.jhipster.compositekey.domain.Business;
 import com.jhipster.compositekey.domain.BasicIndex;
+import com.jhipster.compositekey.domain.BusinessBasicIndexId;
 import com.jhipster.compositekey.repository.BusinessBasicIndexRepository;
 import com.jhipster.compositekey.service.BusinessBasicIndexService;
-import com.jhipster.compositekey.repository.search.BusinessBasicIndexSearchRepository;
 import com.jhipster.compositekey.service.dto.BusinessBasicIndexDTO;
 import com.jhipster.compositekey.service.mapper.BusinessBasicIndexMapper;
 import com.jhipster.compositekey.web.rest.errors.ExceptionTranslator;
@@ -65,9 +65,6 @@ public class BusinessBasicIndexResourceIntTest {
     private BusinessBasicIndexService businessBasicIndexService;
 
     @Autowired
-    private BusinessBasicIndexSearchRepository businessBasicIndexSearchRepository;
-
-    @Autowired
     private BusinessBasicIndexQueryService businessBasicIndexQueryService;
 
     @Autowired
@@ -104,26 +101,24 @@ public class BusinessBasicIndexResourceIntTest {
      * if they test an entity which requires the current entity.
      */
     public static BusinessBasicIndex createEntity(EntityManager em) {
-        BusinessBasicIndex businessBasicIndex = new BusinessBasicIndex()
-            .year(DEFAULT_YEAR)
-            .month(DEFAULT_MONTH)
-            .value(DEFAULT_VALUE);
         // Add required entity
         Business business = BusinessResourceIntTest.createEntity(em);
         em.persist(business);
         em.flush();
-        businessBasicIndex.setBusiness(business);
         // Add required entity
         BasicIndex basicIndex = BasicIndexResourceIntTest.createEntity(em);
         em.persist(basicIndex);
         em.flush();
-        businessBasicIndex.setBasicIndex(basicIndex);
+        BusinessBasicIndex businessBasicIndex = new BusinessBasicIndex(business.getId(), basicIndex.getId(), DEFAULT_YEAR)
+            .month(DEFAULT_MONTH)
+            .value(DEFAULT_VALUE)
+            .business(business)
+            .basicIndex(basicIndex);
         return businessBasicIndex;
     }
 
     @Before
     public void initTest() {
-        businessBasicIndexSearchRepository.deleteAll();
         businessBasicIndex = createEntity(em);
     }
 
@@ -143,22 +138,20 @@ public class BusinessBasicIndexResourceIntTest {
         List<BusinessBasicIndex> businessBasicIndexList = businessBasicIndexRepository.findAll();
         assertThat(businessBasicIndexList).hasSize(databaseSizeBeforeCreate + 1);
         BusinessBasicIndex testBusinessBasicIndex = businessBasicIndexList.get(businessBasicIndexList.size() - 1);
-        assertThat(testBusinessBasicIndex.getYear()).isEqualTo(DEFAULT_YEAR);
+        assertThat(testBusinessBasicIndex.getId().getYear()).isEqualTo(DEFAULT_YEAR);
         assertThat(testBusinessBasicIndex.getMonth()).isEqualTo(DEFAULT_MONTH);
         assertThat(testBusinessBasicIndex.getValue()).isEqualTo(DEFAULT_VALUE);
-
-        // Validate the BusinessBasicIndex in Elasticsearch
-        BusinessBasicIndex businessBasicIndexEs = businessBasicIndexSearchRepository.findOne(testBusinessBasicIndex.getId());
-        assertThat(businessBasicIndexEs).isEqualToIgnoringGivenFields(testBusinessBasicIndex);
     }
 
     @Test
     @Transactional
     public void createBusinessBasicIndexWithExistingId() throws Exception {
+        // Initialize the database
+        businessBasicIndexRepository.saveAndFlush(businessBasicIndex);
+
         int databaseSizeBeforeCreate = businessBasicIndexRepository.findAll().size();
 
         // Create the BusinessBasicIndex with an existing ID
-        businessBasicIndex.setId(1L);
         BusinessBasicIndexDTO businessBasicIndexDTO = businessBasicIndexMapper.toDto(businessBasicIndex);
 
         // An entity with an existing ID cannot be created, so this API call must fail
@@ -170,6 +163,44 @@ public class BusinessBasicIndexResourceIntTest {
         // Validate the BusinessBasicIndex in the database
         List<BusinessBasicIndex> businessBasicIndexList = businessBasicIndexRepository.findAll();
         assertThat(businessBasicIndexList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void checkBusinessIdIsRequired() throws Exception {
+        int databaseSizeBeforeTest = businessBasicIndexRepository.findAll().size();
+        // set the field null
+        businessBasicIndex.getId().setBusinessId(null);
+
+        // Create the BusinessBasicIndex, which fails.
+        BusinessBasicIndexDTO businessBasicIndexDTO = businessBasicIndexMapper.toDto(businessBasicIndex);
+
+        restBusinessBasicIndexMockMvc.perform(post("/api/business-basic-indices")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(businessBasicIndexDTO)))
+                .andExpect(status().isBadRequest());
+
+        List<BusinessBasicIndex> businessBasicIndexList = businessBasicIndexRepository.findAll();
+        assertThat(businessBasicIndexList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkBasicIndexIdIsRequired() throws Exception {
+        int databaseSizeBeforeTest = businessBasicIndexRepository.findAll().size();
+        // set the field null
+        businessBasicIndex.getId().setBasicIndexId(null);
+
+        // Create the BusinessBasicIndex, which fails.
+        BusinessBasicIndexDTO businessBasicIndexDTO = businessBasicIndexMapper.toDto(businessBasicIndex);
+
+        restBusinessBasicIndexMockMvc.perform(post("/api/business-basic-indices")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(businessBasicIndexDTO)))
+                .andExpect(status().isBadRequest());
+
+        List<BusinessBasicIndex> businessBasicIndexList = businessBasicIndexRepository.findAll();
+        assertThat(businessBasicIndexList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -217,10 +248,9 @@ public class BusinessBasicIndexResourceIntTest {
         businessBasicIndexRepository.saveAndFlush(businessBasicIndex);
 
         // Get all the businessBasicIndexList
-        restBusinessBasicIndexMockMvc.perform(get("/api/business-basic-indices?sort=id,desc"))
+        restBusinessBasicIndexMockMvc.perform(get("/api/business-basic-indices?sort=businessId,desc&basicIndexId,desc&year,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(businessBasicIndex.getId().intValue())))
             .andExpect(jsonPath("$.[*].year").value(hasItem(DEFAULT_YEAR)))
             .andExpect(jsonPath("$.[*].month").value(hasItem(DEFAULT_MONTH)))
             .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)));
@@ -233,10 +263,9 @@ public class BusinessBasicIndexResourceIntTest {
         businessBasicIndexRepository.saveAndFlush(businessBasicIndex);
 
         // Get the businessBasicIndex
-        restBusinessBasicIndexMockMvc.perform(get("/api/business-basic-indices/{id}", businessBasicIndex.getId()))
+        restBusinessBasicIndexMockMvc.perform(get("/api/business-basic-indices/{businessId}/{basicIndexId}/{year}", businessBasicIndex.getId().getBusinessId(), businessBasicIndex.getId().getBasicIndexId(), businessBasicIndex.getId().getYear()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(businessBasicIndex.getId().intValue()))
             .andExpect(jsonPath("$.year").value(DEFAULT_YEAR))
             .andExpect(jsonPath("$.month").value(DEFAULT_MONTH))
             .andExpect(jsonPath("$.value").value(DEFAULT_VALUE));
@@ -481,10 +510,9 @@ public class BusinessBasicIndexResourceIntTest {
      * Executes the search, and checks that the default entity is returned
      */
     private void defaultBusinessBasicIndexShouldBeFound(String filter) throws Exception {
-        restBusinessBasicIndexMockMvc.perform(get("/api/business-basic-indices?sort=id,desc&" + filter))
+        restBusinessBasicIndexMockMvc.perform(get("/api/business-basic-indices?sort=businessId,desc&basicIndexId,desc&year,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(businessBasicIndex.getId().intValue())))
             .andExpect(jsonPath("$.[*].year").value(hasItem(DEFAULT_YEAR)))
             .andExpect(jsonPath("$.[*].month").value(hasItem(DEFAULT_MONTH)))
             .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)));
@@ -494,7 +522,7 @@ public class BusinessBasicIndexResourceIntTest {
      * Executes the search, and checks that the default entity is not returned
      */
     private void defaultBusinessBasicIndexShouldNotBeFound(String filter) throws Exception {
-        restBusinessBasicIndexMockMvc.perform(get("/api/business-basic-indices?sort=id,desc&" + filter))
+        restBusinessBasicIndexMockMvc.perform(get("/api/business-basic-indices?sort=businessId,desc&basicIndexId,desc&year,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
@@ -506,7 +534,7 @@ public class BusinessBasicIndexResourceIntTest {
     @Transactional
     public void getNonExistingBusinessBasicIndex() throws Exception {
         // Get the businessBasicIndex
-        restBusinessBasicIndexMockMvc.perform(get("/api/business-basic-indices/{id}", Long.MAX_VALUE))
+        restBusinessBasicIndexMockMvc.perform(get("/api/business-basic-indices/{businessId}/{basicIndexId}/{year}", Long.MAX_VALUE, Long.MAX_VALUE, Integer.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
 
@@ -515,7 +543,6 @@ public class BusinessBasicIndexResourceIntTest {
     public void updateBusinessBasicIndex() throws Exception {
         // Initialize the database
         businessBasicIndexRepository.saveAndFlush(businessBasicIndex);
-        businessBasicIndexSearchRepository.save(businessBasicIndex);
         int databaseSizeBeforeUpdate = businessBasicIndexRepository.findAll().size();
 
         // Update the businessBasicIndex
@@ -523,7 +550,6 @@ public class BusinessBasicIndexResourceIntTest {
         // Disconnect from session so that the updates on updatedBusinessBasicIndex are not directly saved in db
         em.detach(updatedBusinessBasicIndex);
         updatedBusinessBasicIndex
-            .year(UPDATED_YEAR)
             .month(UPDATED_MONTH)
             .value(UPDATED_VALUE);
         BusinessBasicIndexDTO businessBasicIndexDTO = businessBasicIndexMapper.toDto(updatedBusinessBasicIndex);
@@ -537,13 +563,8 @@ public class BusinessBasicIndexResourceIntTest {
         List<BusinessBasicIndex> businessBasicIndexList = businessBasicIndexRepository.findAll();
         assertThat(businessBasicIndexList).hasSize(databaseSizeBeforeUpdate);
         BusinessBasicIndex testBusinessBasicIndex = businessBasicIndexList.get(businessBasicIndexList.size() - 1);
-        assertThat(testBusinessBasicIndex.getYear()).isEqualTo(UPDATED_YEAR);
         assertThat(testBusinessBasicIndex.getMonth()).isEqualTo(UPDATED_MONTH);
         assertThat(testBusinessBasicIndex.getValue()).isEqualTo(UPDATED_VALUE);
-
-        // Validate the BusinessBasicIndex in Elasticsearch
-        BusinessBasicIndex businessBasicIndexEs = businessBasicIndexSearchRepository.findOne(testBusinessBasicIndex.getId());
-        assertThat(businessBasicIndexEs).isEqualToIgnoringGivenFields(testBusinessBasicIndex);
     }
 
     @Test
@@ -570,17 +591,12 @@ public class BusinessBasicIndexResourceIntTest {
     public void deleteBusinessBasicIndex() throws Exception {
         // Initialize the database
         businessBasicIndexRepository.saveAndFlush(businessBasicIndex);
-        businessBasicIndexSearchRepository.save(businessBasicIndex);
         int databaseSizeBeforeDelete = businessBasicIndexRepository.findAll().size();
 
         // Get the businessBasicIndex
-        restBusinessBasicIndexMockMvc.perform(delete("/api/business-basic-indices/{id}", businessBasicIndex.getId())
+        restBusinessBasicIndexMockMvc.perform(delete("/api/business-basic-indices/{businessId}/{basicIndexId}/{year}", businessBasicIndex.getId().getBusinessId(), businessBasicIndex.getId().getBasicIndexId(), businessBasicIndex.getId().getYear())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
-
-        // Validate Elasticsearch is empty
-        boolean businessBasicIndexExistsInEs = businessBasicIndexSearchRepository.exists(businessBasicIndex.getId());
-        assertThat(businessBasicIndexExistsInEs).isFalse();
 
         // Validate the database is empty
         List<BusinessBasicIndex> businessBasicIndexList = businessBasicIndexRepository.findAll();
@@ -589,31 +605,13 @@ public class BusinessBasicIndexResourceIntTest {
 
     @Test
     @Transactional
-    public void searchBusinessBasicIndex() throws Exception {
-        // Initialize the database
-        businessBasicIndexRepository.saveAndFlush(businessBasicIndex);
-        businessBasicIndexSearchRepository.save(businessBasicIndex);
-
-        // Search the businessBasicIndex
-        restBusinessBasicIndexMockMvc.perform(get("/api/_search/business-basic-indices?query=id:" + businessBasicIndex.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(businessBasicIndex.getId().intValue())))
-            .andExpect(jsonPath("$.[*].year").value(hasItem(DEFAULT_YEAR)))
-            .andExpect(jsonPath("$.[*].month").value(hasItem(DEFAULT_MONTH)))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)));
-    }
-
-    @Test
-    @Transactional
+    public void equalsVerifier() throws Exception {
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(BusinessBasicIndex.class);
-        BusinessBasicIndex businessBasicIndex1 = new BusinessBasicIndex();
-        businessBasicIndex1.setId(1L);
-        BusinessBasicIndex businessBasicIndex2 = new BusinessBasicIndex();
-        businessBasicIndex2.setId(businessBasicIndex1.getId());
+        BusinessBasicIndex businessBasicIndex1 = new BusinessBasicIndex(1L, 2L, DEFAULT_YEAR);
+        BusinessBasicIndex businessBasicIndex2 = new BusinessBasicIndex(1L, 2L, DEFAULT_YEAR);
         assertThat(businessBasicIndex1).isEqualTo(businessBasicIndex2);
-        businessBasicIndex2.setId(2L);
+        businessBasicIndex2.getId().setBusinessId(3L);
         assertThat(businessBasicIndex1).isNotEqualTo(businessBasicIndex2);
         businessBasicIndex1.setId(null);
         assertThat(businessBasicIndex1).isNotEqualTo(businessBasicIndex2);
@@ -624,21 +622,28 @@ public class BusinessBasicIndexResourceIntTest {
     public void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(BusinessBasicIndexDTO.class);
         BusinessBasicIndexDTO businessBasicIndexDTO1 = new BusinessBasicIndexDTO();
-        businessBasicIndexDTO1.setId(1L);
+        businessBasicIndexDTO1.setBasicIndexId(1L);
+        businessBasicIndexDTO1.setBusinessId(2L);
+        businessBasicIndexDTO1.setYear(DEFAULT_YEAR);
         BusinessBasicIndexDTO businessBasicIndexDTO2 = new BusinessBasicIndexDTO();
         assertThat(businessBasicIndexDTO1).isNotEqualTo(businessBasicIndexDTO2);
-        businessBasicIndexDTO2.setId(businessBasicIndexDTO1.getId());
+        businessBasicIndexDTO2.setBasicIndexId(businessBasicIndexDTO1.getBasicIndexId());
+        businessBasicIndexDTO2.setBusinessId(businessBasicIndexDTO1.getBusinessId());
+        businessBasicIndexDTO2.setYear(businessBasicIndexDTO1.getYear());
         assertThat(businessBasicIndexDTO1).isEqualTo(businessBasicIndexDTO2);
-        businessBasicIndexDTO2.setId(2L);
+        businessBasicIndexDTO2.setBasicIndexId(2L);
         assertThat(businessBasicIndexDTO1).isNotEqualTo(businessBasicIndexDTO2);
-        businessBasicIndexDTO1.setId(null);
+        businessBasicIndexDTO1.setBasicIndexId(null);
+        businessBasicIndexDTO1.setBusinessId(null);
+        businessBasicIndexDTO1.setYear(null);
         assertThat(businessBasicIndexDTO1).isNotEqualTo(businessBasicIndexDTO2);
     }
 
     @Test
     @Transactional
     public void testEntityFromId() {
-        assertThat(businessBasicIndexMapper.fromId(42L).getId()).isEqualTo(42);
+        BusinessBasicIndexId id = new BusinessBasicIndexId(1L, 2L, DEFAULT_YEAR);
+        assertThat(businessBasicIndexMapper.fromId(id).getId()).isEqualTo(id);
         assertThat(businessBasicIndexMapper.fromId(null)).isNull();
     }
 }

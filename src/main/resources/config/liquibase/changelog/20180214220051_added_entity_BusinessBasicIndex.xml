@@ -20,6 +20,14 @@
     <changeSet id="20180213001611-1" author="jhipster">
         <createTable tableName="business_basic_index">
 
+            <column name="business_id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+
+            <column name="basic_index_id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+
             <column name="jhi_year" type="integer">
                 <constraints primaryKey="true" nullable="false" />
             </column>
@@ -30,14 +38,6 @@
 
             <column name="jhi_value" type="integer">
                 <constraints nullable="false" />
-            </column>
-
-            <column name="business_id" type="bigint">
-                <constraints primaryKey="true" nullable="false" />
-            </column>
-
-            <column name="basic_index_id" type="bigint">
-                <constraints primaryKey="true" nullable="false" />
             </column>
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->

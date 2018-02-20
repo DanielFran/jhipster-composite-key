@@ -16,17 +16,17 @@ import org.mapstruct.*;
 public interface BusinessBasicIndexMapper extends EntityMapper<BusinessBasicIndexDTO, BusinessBasicIndex> {
 
     @Mapping(source = "id.businessId", target = "businessId")
-    @Mapping(source = "business.name", target = "businessName")
     @Mapping(source = "id.basicIndexId", target = "basicIndexId")
-    @Mapping(source = "basicIndex.name", target = "basicIndexName")
     @Mapping(source = "id.year", target = "year")
+    @Mapping(source = "business.name", target = "businessName")
+    @Mapping(source = "basicIndex.name", target = "basicIndexName")
     BusinessBasicIndexDTO toDto(BusinessBasicIndex businessBasicIndex);
 
-    @Mapping(source = "businessId", target = "business")
-    @Mapping(source = "basicIndexId", target = "basicIndex")
     @Mapping(source = "businessId", target = "id.businessId")
     @Mapping(source = "basicIndexId", target = "id.basicIndexId")
     @Mapping(source = "year", target = "id.year")
+    @Mapping(source = "businessId", target = "business")
+    @Mapping(source = "basicIndexId", target = "basicIndex")
     BusinessBasicIndex toEntity(BusinessBasicIndexDTO businessBasicIndexDTO);
 
     default BusinessBasicIndex fromId(BusinessBasicIndexId id) {

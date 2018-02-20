@@ -34,6 +34,19 @@ public class BusinessBasicIndexServiceImpl implements BusinessBasicIndexService 
     }
 
     /**
+     * Validate if one businessBasicIndex exists.
+     *
+     * @param id the id of the entity
+     * @return boolean
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public boolean exists(BusinessBasicIndexId id) {
+        log.debug("Request if exists BusinessBasicIndex : {}", id);
+        return businessBasicIndexRepository.exists(id);
+    }
+
+    /**
      * Save a businessBasicIndex.
      *
      * @param businessBasicIndexDTO the entity to save

@@ -13,6 +13,12 @@ import java.util.Objects;
 public class BusinessBasicIndexDTO implements Serializable {
 
     @NotNull
+    private Long businessId;
+
+    @NotNull
+    private Long basicIndexId;
+
+    @NotNull
     private Integer year;
 
     @Min(value = 1)
@@ -23,13 +29,25 @@ public class BusinessBasicIndexDTO implements Serializable {
     @Min(value = 0)
     private Integer value;
 
-    private Long businessId;
-
     private String businessName;
 
-    private Long basicIndexId;
-
     private String basicIndexName;
+
+    public Long getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(Long businessId) {
+        this.businessId = businessId;
+    }
+
+    public Long getBasicIndexId() {
+        return basicIndexId;
+    }
+
+    public void setBasicIndexId(Long basicIndexId) {
+        this.basicIndexId = basicIndexId;
+    }
 
     public Integer getYear() {
         return year;
@@ -55,28 +73,12 @@ public class BusinessBasicIndexDTO implements Serializable {
         this.value = value;
     }
 
-    public Long getBusinessId() {
-        return businessId;
-    }
-
-    public void setBusinessId(Long businessId) {
-        this.businessId = businessId;
-    }
-
     public String getBusinessName() {
         return businessName;
     }
 
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
-    }
-
-    public Long getBasicIndexId() {
-        return basicIndexId;
-    }
-
-    public void setBasicIndexId(Long basicIndexId) {
-        this.basicIndexId = basicIndexId;
     }
 
     public String getBasicIndexName() {
@@ -95,30 +97,37 @@ public class BusinessBasicIndexDTO implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         BusinessBasicIndexDTO businessBasicIndexDTO = (BusinessBasicIndexDTO) o;
-        return Objects.equals(businessId, businessBasicIndexDTO.businessId)
-            && Objects.equals(basicIndexId, businessBasicIndexDTO.basicIndexId)
-            && Objects.equals(year, businessBasicIndexDTO.year)
-            ;
-
+        if (businessBasicIndexDTO.getBusinessId() == null && businessBasicIndexDTO.getBasicIndexId() == null && businessBasicIndexDTO.getYear() == null) {
+            return false;
+        }
+        if (getBusinessId() == null && getBasicIndexId() == null && getYear() == null) {
+            return false;
+        }
+        return Objects.equals(getBusinessId(), businessBasicIndexDTO.getBusinessId())
+                && Objects.equals(getBasicIndexId(), businessBasicIndexDTO.getBasicIndexId())
+                && Objects.equals(getYear(), businessBasicIndexDTO.getYear());
     }
 
     @Override
     public int hashCode() {
         int result = 17;
-        result = 31 * result + businessId.hashCode();
-        result = 31 * result + basicIndexId.hashCode();
-        result = 31 * result + year.hashCode();
+        result = 31 * result + Objects.hashCode(this.businessId);
+        result = 31 * result + Objects.hashCode(this.basicIndexId);
+        result = 31 * result + Objects.hashCode(this.year);
         return result;
     }
 
     @Override
     public String toString() {
         return "BusinessBasicIndexDTO{" +
+            "businessId=" + getBusinessId() +
+            ", basicIndexId()=" + getBasicIndexId() +
             ", year=" + getYear() +
             ", month=" + getMonth() +
             ", value=" + getValue() +
+            ", businessName=" + getBusinessName() +
+            ", basicIndexName=" + getBasicIndexName() +
             "}";
     }
 }
